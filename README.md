@@ -4,7 +4,7 @@
 
 ## Inhaltsverzeichnis
 
-1. [RegEx]((https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/RegEx.md))
+1. [RegEx](https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/RegEx.md)
 2. []()
 3. []()
 4. []()
