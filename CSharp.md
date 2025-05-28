@@ -42,14 +42,204 @@ namespace MyApp {
 
 ## 3. Datentypen & Variablen
 
-```csharp
-int a = 5;
-double pi = 3.14;
-bool isDone = false;
-char c = 'X';
-string message = "Hallo";
-var inferred = 42;
+### Datenbindung (Binding)
+
+Datenbindung bezeichnet die automatische Synchronisierung von Daten zwischen UI-Komponenten (z. B. in WPF, WinForms, Blazor) und Datenquellen (z. B. Models).
+
+Es gibt verschiedene Bindungsarten:
+
+* **One-Way Binding:** Daten fließen vom Model zur View
+* **Two-Way Binding:** Daten fließen in beide Richtungen (z. B. bei Formulareingaben)
+* **One-Time Binding:** Nur beim Initialisieren gebunden
+
+### Beispiel in WPF (XAML):
+
+```xml
+<TextBox Text="{Binding UserName, Mode=TwoWay}" />
 ```
+
+### Beispiel: ViewModel in C\#
+
+```csharp
+public class UserViewModel : INotifyPropertyChanged {
+    private string _userName;
+
+    public string UserName {
+        get => _userName;
+        set {
+            _userName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
+```
+
+### Erklärung:
+
+* `INotifyPropertyChanged` signalisiert der UI, wenn sich ein Property-Wert ändert.
+* `PropertyChanged` wird durch `OnPropertyChanged` ausgelöst.
+* `CallerMemberName` sorgt dafür, dass der Propertyname automatisch übergeben wird.
+
+### Binding in Blazor
+
+In Blazor wird Datenbindung über `@bind` direkt in HTML-artigem Razor-Syntax umgesetzt.
+
+```razor
+<input @bind="UserName" />
+```
+
+* `@bind` erstellt eine Two-Way-Bindung zwischen UI und Property.
+* Intern werden `value`- und `onchange`-Events gekoppelt.
+
+### Command Binding in MVVM (z. B. WPF)
+
+Für Aktionen wird in WPF typischerweise das `ICommand`-Interface verwendet:
+
+```csharp
+public class RelayCommand : ICommand {
+    private readonly Action _execute;
+    public RelayCommand(Action execute) => _execute = execute;
+
+    public event EventHandler CanExecuteChanged;
+    public bool CanExecute(object parameter) => true;
+    public void Execute(object parameter) => _execute();
+}
+```
+
+```csharp
+public ICommand SubmitCommand { get; }
+SubmitCommand = new RelayCommand(() => Submit());
+```
+
+```xml
+<Button Content="OK" Command="{Binding SubmitCommand}" />
+```
+
+### Validierung mit DataAnnotations
+
+### ObservableCollection<T>
+
+In WPF und MAUI wird zur dynamischen Listenbindung oft `ObservableCollection<T>` verwendet. Sie informiert die UI über Änderungen (Add/Remove/Reset).
+
+```csharp
+public ObservableCollection<string> Items { get; } = new();
+Items.Add("Element 1");
+```
+
+### BindingContext (z. B. in MAUI / Xamarin)
+
+```csharp
+this.BindingContext = new MyViewModel();
+```
+
+Damit wird das ViewModel global für Bindings innerhalb der View (z. B. Page, UserControl) gesetzt.
+
+### Benutzerdefinierte Validierungsattribute
+
+```csharp
+public class NotEmptyAttribute : ValidationAttribute {
+    public override bool IsValid(object value) =>
+        value is string str && !string.IsNullOrWhiteSpace(str);
+}
+
+public class ContactForm {
+    [NotEmpty(ErrorMessage = "Name darf nicht leer sein")]
+    public string Name { get; set; }
+}
+```
+
+### Verwendung von ValidationResult
+
+```csharp
+var context = new ValidationContext(model);
+var results = new List<ValidationResult>();
+bool isValid = Validator.TryValidateObject(model, context, results, true);
+```
+
+* Mit `Validator.TryValidateObject` kann man manuell ein Objekt gegen Regeln prüfen.
+* `ValidationResult` enthält dabei Details zu jedem Verstoß.
+
+```csharp
+public class LoginModel {
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    [MinLength(6)]
+    public string Password { get; set; }
+}
+```
+
+* DataAnnotation-Attribute validieren Eingaben automatisch.
+* In ASP.NET und Blazor ist die Integration direkt unterstützt.
+
+**Hinweis:** In Blazor, WPF und MAUI erfolgt Bindung in Kombination mit PropertyChanged-Logik, Commands und Validierungsattributen.
+
+C# unterscheidet zwischen **Werttypen** (Value Types) und **Referenztypen** (Reference Types):
+
+* **Werttypen** speichern direkt den Wert (z. B. `int`, `bool`, `char`).
+* **Referenztypen** speichern eine Referenz auf die Daten (z. B. `string`, `object`, Klassen).
+
+### Primitive Datentypen
+
+```csharp
+int number = 5;              // Ganzzahl (32 Bit)
+bool isActive = true;        // Wahrheitswert
+char letter = 'A';           // Unicode-Zeichen
+double average = 3.14;       // Gleitkommazahl (64 Bit)
+decimal price = 19.99M;      // Dezimalwert mit hoher Genauigkeit
+string name = "Anna";        // Zeichenkette (Referenztyp)
+```
+
+### var-Schlüsselwort
+
+```csharp
+var count = 10;     // compiler-inferierter Typ: int
+var message = "Hi"; // compiler-inferierter Typ: string
+```
+
+> `var` muss immer mit Initialisierung verwendet werden und wird zur Compilezeit aufgelöst.
+
+### Properties (Eigenschaften)
+
+```csharp
+public class Product {
+    public string Name { get; set; }          // Auto-Property
+    public decimal Price { get; private set; } // Nur lesbar von außen
+
+    public bool InStock => Price > 0;          // Readonly-Property (Ausdrucksform)
+}
+```
+
+* Properties kapseln Felder mit optionaler Logik (Getter/Setter).
+* `get` liest den Wert, `set` weist einen neuen Wert zu.
+* Auto-Properties (`{ get; set; }`) erstellen intern ein anonymes Feld.
+
+### Nullable-Typen
+
+```csharp
+int? optional = null;
+if (optional.HasValue) {
+    Console.WriteLine(optional.Value);
+}
+```
+
+* Mit `?` können Werttypen `null` zugewiesen bekommen.
+* Alternative: Null-Koaleszenz (`??`), Null-Prüfung mit `?.` und `??=`.
+
+### Konstanten und readonly
+
+```csharp
+const double Pi = 3.1415;        // zur Compile-Zeit festgelegt
+readonly DateTime startTime = DateTime.Now; // zur Laufzeit initialisierbar
+```
+
+---
 
 ---
 
@@ -108,11 +298,11 @@ dog.Speak(); // Ausgabe: Wuff!
 
 ### Erklärungen:
 
-- `class` definiert eine Klasse.
-- `public` macht Member von außen zugänglich.
-- `virtual` erlaubt das Überschreiben der Methode.
-- `override` überschreibt die geerbte Methode.
-- Mit `new Dog { ... }` wird ein Objekt mit Initialisierer erzeugt.
+* `class` definiert eine Klasse.
+* `public` macht Member von außen zugänglich.
+* `virtual` erlaubt das Überschreiben der Methode.
+* `override` überschreibt die geerbte Methode.
+* Mit `new Dog { ... }` wird ein Objekt mit Initialisierer erzeugt.
 
 **Hinweis:** Klassen können Konstruktoren, Properties, Felder, Methoden, Ereignisse und Indexer enthalten. Standardmäßig sind Klassen referenzbasiert.
 
@@ -124,9 +314,9 @@ Interfaces in C# definieren einen **Vertrag**, den implementierende Klassen erf�
 
 ### Vorteile:
 
-- Ermöglichen polymorphe Programmierung
-- Entkoppeln Implementierung von der Schnittstelle
-- Unterstützen Dependency Injection und Testbarkeit
+* Ermöglichen polymorphe Programmierung
+* Entkoppeln Implementierung von der Schnittstelle
+* Unterstützen Dependency Injection und Testbarkeit
 
 ### Beispiel: Interface und Implementierung
 
@@ -151,10 +341,10 @@ Test(logger); // Ausgabe: [LOG] Dies ist eine Meldung
 
 ### Erklärungen:
 
-- `interface` deklariert eine Schnittstelle.
-- Eine Klasse implementiert ein Interface mit `: InterfaceName`.
-- Die Methode muss exakt zur Signatur passen.
-- Du kannst mehrere Interfaces implementieren (Komma getrennt).
+* `interface` deklariert eine Schnittstelle.
+* Eine Klasse implementiert ein Interface mit `: InterfaceName`.
+* Die Methode muss exakt zur Signatur passen.
+* Du kannst mehrere Interfaces implementieren (Komma getrennt).
 
 **Hinweis:** Interfaces fördern saubere Architekturprinzipien wie SOLID – speziell das Interface Segregation Principle und das Dependency Inversion Principle.
 
@@ -178,9 +368,9 @@ try {
 
 ### Erklärungen:
 
-- `try`-Block enthält riskanten Code.
-- `catch` fängt spezifische oder allgemeine Exceptions.
-- `finally` wird **immer** ausgeführt (auch bei Fehlern oder `return`).
+* `try`-Block enthält riskanten Code.
+* `catch` fängt spezifische oder allgemeine Exceptions.
+* `finally` wird **immer** ausgeführt (auch bei Fehlern oder `return`).
 
 ### Eigene Exception-Klasse
 
@@ -192,10 +382,10 @@ class MyCustomException : Exception {
 
 ### Tipps:
 
-- Fange **nie** pauschal `Exception` ohne sinnvolle Behandlung.
-- Nutze gezielte `catch`-Blöcke für erwartete Fehler.
-- Logge Ausnahmen zentral (z. B. mit Serilog oder ILogger).
-- Werfe eigene Exceptions nur bei **wirklich außergewöhnlichen** Zuständen.
+* Fange **nie** pauschal `Exception` ohne sinnvolle Behandlung.
+* Nutze gezielte `catch`-Blöcke für erwartete Fehler.
+* Logge Ausnahmen zentral (z. B. mit Serilog oder ILogger).
+* Werfe eigene Exceptions nur bei **wirklich außergewöhnlichen** Zuständen.
 
 ---
 
@@ -223,15 +413,15 @@ async Task<string> FetchAsync() {
 
 ### Erklärungen:
 
-- `async` markiert eine Methode als asynchron.
-- `await` wartet auf das Ergebnis eines Tasks.
-- Rückgabetyp ist i. d. R. `Task` oder `Task<T>`.
+* `async` markiert eine Methode als asynchron.
+* `await` wartet auf das Ergebnis eines Tasks.
+* Rückgabetyp ist i. d. R. `Task` oder `Task<T>`.
 
 ### Wichtige Hinweise:
 
-- Verwende `ConfigureAwait(false)` in Bibliotheken.
-- Async-Methoden sollen _nicht_ `void` zurückgeben (außer Eventhandler).
-- Fehler in async-Methoden lösen Exceptions aus, die im `Task` verpackt sind.
+* Verwende `ConfigureAwait(false)` in Bibliotheken.
+* Async-Methoden sollen *nicht* `void` zurückgeben (außer Eventhandler).
+* Fehler in async-Methoden lösen Exceptions aus, die im `Task` verpackt sind.
 
 ### Beispiel: mehrere Tasks parallel
 
@@ -258,8 +448,8 @@ var even = list.Where(x => x % 2 == 0).ToList();
 
 ### Erklärungen:
 
-- `Where` ist ein **Extension-Method**, die einen Predicate-Filter anwendet.
-- LINQ verwendet Lambda-Ausdrücke (`x => ...`).
+* `Where` ist ein **Extension-Method**, die einen Predicate-Filter anwendet.
+* LINQ verwendet Lambda-Ausdrücke (`x => ...`).
 
 ### Weitere Operatoren:
 
@@ -281,6 +471,77 @@ var query = from x in list
 
 ---
 
+## 12. Entity Framework Core
+
+Entity Framework Core (EF Core) ist ein modernes ORM (Object-Relational Mapper), das den Zugriff auf Datenbanken über C#-Objekte ermöglicht.
+
+### Installation (per CLI)
+
+```bash
+# Für SQLite
+$ dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+
+# Für SQL Server
+$ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+# Tools für Migrationen
+$ dotnet add package Microsoft.EntityFrameworkCore.Tools
+```
+
+### Modell & DbContext
+
+```csharp
+public class User {
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+public class AppDbContext : DbContext {
+    public DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder options) =>
+        options.UseSqlite("Data Source=app.db");
+}
+```
+
+### Migration & Datenbank erzeugen
+
+```bash
+$ dotnet ef migrations add InitialCreate
+$ dotnet ef database update
+```
+
+### CRUD-Operationen
+
+```csharp
+using var db = new AppDbContext();
+
+// Create
+var user = new User { Name = "Alice" };
+db.Users.Add(user);
+db.SaveChanges();
+
+// Read
+var users = db.Users.ToList();
+
+// Update
+user.Name = "Bob";
+db.SaveChanges();
+
+// Delete
+db.Users.Remove(user);
+db.SaveChanges();
+```
+
+### Hinweise:
+
+* DbContext ist zentraler Einstiegspunkt zur Datenbank.
+* Migrationen generieren Schemaänderungen in Code.
+* Nutze `AsNoTracking()` für lesende Zugriffe ohne Change Tracking.
+* Konfiguration kann auch über `appsettings.json` und DI erfolgen.
+
+---
+
 ## 13. ASP.NET Core Minimal API
 
 ```csharp
@@ -294,192 +555,4 @@ app.Run();
 
 ---
 
-_Stand: .NET 8 – für produktionsreife Anwendungen empfohlene Praxis._
-C# cheatsheet
-=============
-
-C# quick reference cheat sheet that provides basic syntax and methods.
-
-## [#](#getting-started)Getting Started
-
-### [#](#hello-cs)Hello.cs
-
-`class Hello {   // main method   static void Main(string[] args)   {     // Output: Hello, world!     Console.WriteLine("Hello, world!");   } }`
-
-Creates a project directory for new console application
-
-`$ dotnet new console`
-
-Lists all the applications templates
-
-`$ dotnet new list`
-
-Compiling and running (make sure you are in the project directory)
-
-`$ dotnet run Hello, world!`
-
-### [#](#variables)Variables
-
-`int intNum = 9; long longNum = 9999999; float floatNum = 9.99F; double doubleNum = 99.999; decimal decimalNum = 99.9999M; char letter = 'D'; bool @bool = true; string site = "cheatsheets.zip";  var num = 999; var str = "999"; var bo = false;`
-
-### [#](#primitive-data-types)Primitive Data Types
-
-Data Type
-
-Size
-
-Range
-
-`int`
-
-4 bytes
-
-\-231 to 231\-1
-
-`long`
-
-8 bytes
-
-\-263 to 263\-1
-
-`float`
-
-4 bytes
-
-6 to 7 decimal digits
-
-`double`
-
-8 bytes
-
-15 decimal digits
-
-`decimal`
-
-16 bytes
-
-28 to 29 decimal digits
-
-`char`
-
-2 bytes
-
-0 to 65535
-
-`bool`
-
-1 bit
-
-true / false
-
-`string`
-
-2 bytes per char
-
-_N/A_
-
-### [#](#comments)Comments
-
-`// Single-line comment  /* Multi-line    comment */  // TODO: Adds comment to a task list in Visual Studio  /// Single-line comment used for documentation  /** Multi-line comment     used for documentation **/`
-
-### [#](#strings)Strings
-
-`string first = "John"; string last = "Doe";  // string concatenation string name = first + " " + last; Console.WriteLine(name); // => John Doe`
-
-See: [Strings](#c-strings)
-
-### [#](#user-input)User Input
-
-`Console.WriteLine("Enter number:"); if(int.TryParse(Console.ReadLine(),out int input)) {   // Input validated   Console.WriteLine($"You entered {input}"); }`
-
-### [#](#conditionals)Conditionals
-
-`int j = 10;  if (j == 10) {   Console.WriteLine("I get printed"); } else if (j > 10) {   Console.WriteLine("I don't"); } else {   Console.WriteLine("I also don't"); }`
-
-### [#](#arrays)Arrays
-
-`char[] chars = new char[10]; chars[0] = 'a'; chars[1] = 'b';  string[] letters = {"A", "B", "C"}; int[] mylist = {100, 200}; bool[] answers = {true, false};`
-
-### [#](#loops)Loops
-
-`int[] numbers = {1, 2, 3, 4, 5};  for(int i = 0; i < numbers.Length; i++) {   Console.WriteLine(numbers[i]); }`
-
----
-
-`foreach(int num in numbers) {   Console.WriteLine(num); }`
-
-## [#](#c-strings)C# Strings
-
-### [#](#string-concatenation)String concatenation
-
-`string first = "John"; string last = "Doe";  string name = first + " " + last; Console.WriteLine(name); // => John Doe`
-
-### [#](#string-interpolation)String interpolation
-
-`string first = "John"; string last = "Doe";  string name = $"{first} {last}"; Console.WriteLine(name); // => John Doe`
-
-### [#](#string-members)String Members
-
-Member
-
-Description
-
-Length
-
-A property that returns the length of the string.
-
-Compare()
-
-A static method that compares two strings.
-
-Contains()
-
-Determines if the string contains a specific substring.
-
-Equals()
-
-Determines if the two strings have the same character data.
-
-Format()
-
-Formats a string via the {0} notation and by using other primitives.
-
-Trim()
-
-Removes all instances of specific characters from trailing and leading characters. Defaults to removing leading and trailing spaces.
-
-Split()
-
-Removes the provided character and creates an array out of the remaining characters on either side.
-
-### [#](#verbatim-strings)Verbatim strings
-
-`string longString = @"I can type any characters in here !#@$%^&*()__+ '' \n \t except double quotes and I will be taken literally. I even work with multiple lines.";`
-
-### [#](#member-example)Member Example
-
-`// Using property of System.String string lengthOfString = "How long?"; lengthOfString.Length           // => 9  // Using methods of System.String lengthOfString.Contains("How"); // => true`
-
-## [#](#misc)Misc
-
-### [#](#general-net-terms)General .NET Terms
-
-Term
-
-Definition
-
-Runtime
-
-A collection of services that are required to execute a given compiled unit of code.
-
-Common Language Runtime (CLR)
-
-Primarily locates, loads, and managed .NET objects. The CLR also handles memory management, application hosting, coordination of threads, performing security checks, and other low-level details.
-
-Managed code
-
-Code that compiles and runs on .NET runtime. C#/F#/VB are examples.
-
-Unmanaged code
-
-Code that compiles straight to machine code and cannot be directly hosted by the .NET runtime. Contains no free memory management, garbage collection, etc. DLLs created from C/C++ are examples.
+*Stand: .NET 8 – für produktionsreife Anwendungen empfohlene Praxis.*
