@@ -2,19 +2,108 @@
 
 ## Inhaltsverzeichnis
 
-1. [Einführung](#1-einf%C3%BChrung)
+1. [Einführung](#1-einführung)
 2. [Grundlegende Syntax](#2-grundlegende-syntax)
 3. [Datentypen & Variablen](#3-datentypen--variablen)
+
+   * [Primitive Typen](#primitive-datentypen)
+   * [var-Schlüsselwort](#var-schlüsselwort)
+   * [Properties](#properties-eigenschaften)
+   * [Nullable-Typen](#nullable-typen)
+   * [Konstanten und readonly](#konstanten-und-readonly)
+   * [Datenbindung](#datenbindung-binding)
+   * [Binding in Blazor](#binding-in-blazor)
+   * [Command Binding (MVVM)](#command-binding-in-mvvm-z-b-wpf)
+   * [Validierung mit DataAnnotations](#validierung-mit-dataannotations)
+   * [ObservableCollection](#observablecollectiont)
+   * [BindingContext](#bindingcontext-z-b-in-maui--xamarin)
+   * [Benutzerdefinierte Validierung](#benutzerdefinierte-validierungsattribute)
+   * [ValidationResult verwenden](#verwendung-von-validationresult)
 4. [Kontrollstrukturen](#4-kontrollstrukturen)
 5. [Methoden & Parameter](#5-methoden--parameter)
 6. [OOP: Klassen & Vererbung](#6-oop-klassen--vererbung)
+
+   * [Vererbung und Polymorphie](#beispiel-basisklasse-und-abgeleitete-klasse)
+   * [Virtuelle und überschriebene Methoden](#erklärungen)
 7. [Interfaces & Abstraktion](#7-interfaces--abstraktion)
+
+   * [Beispielimplementierung](#beispiel-interface-und-implementierung)
+   * [Designprinzipien](#erklärungen)
 8. [Fehlerbehandlung](#8-fehlerbehandlung)
+
+   * [try-catch-finally](#beispiel-division-durch-null)
+   * [Eigene Exception-Klasse](#eigene-exception-klasse)
+   * [Best Practices](#tipps)
 9. [Dateizugriff](#9-dateizugriff)
 10. [Async & Await](#10-async--await)
+
+    * [Grundlagen](#erklärungen)
+    * [Parallele Tasks](#beispiel-mehrere-tasks-parallel)
 11. [LINQ Grundlagen](#11-linq-grundlagen)
+
+    * [Method Syntax](#weitere-operatoren)
+    * [Query Syntax](#query-syntax-alternative-schreibweise)
 12. [Entity Framework Core](#12-entity-framework-core)
+
+    * [Installation](#installation-per-cli)
+    * [Modell & DbContext](#modell--dbcontext)
+    * [Migrationen](#migration--datenbank-erzeugen)
+    * [CRUD](#crud-operationen)
 13. [ASP.NET Core Minimal API](#13-aspnet-core-minimal-api)
+
+---
+
+## Anhang: Technische Begriffe
+
+### .NET Runtime
+
+Ein Satz von Diensten, der zum Ausführen von .NET-Anwendungen erforderlich ist. Er umfasst u. a.:
+
+* Speicherverwaltung
+* Assembly- und Typauflösung
+* Exception-Handling
+* JIT-Kompilierung
+
+### Common Language Runtime (CLR)
+
+Kernkomponente der .NET-Runtime, die:
+
+* Code lädt und ausführt
+* Garbage Collection durchführt
+* Sicherheitsüberprüfungen und Exception-Handling steuert
+
+### Managed Code
+
+Code, der vom CLR verwaltet wird. Er profitiert von Speicherverwaltung, Sicherheit, Portabilität und Typüberprüfung.
+
+### Unmanaged Code
+
+Code, der direkt vom Betriebssystem ausgeführt wird (z. B. C/C++ DLLs). Keine Garbage Collection oder CLR-Dienste.
+
+### Assembly
+
+Die kleinste deploybare Einheit einer .NET-Anwendung (.dll oder .exe). Enthält IL (Intermediate Language), Metadaten und Ressourcen.
+
+### IL (Intermediate Language)
+
+Von C#-Compiler erzeugter Zwischencode, der zur Laufzeit vom CLR (JIT) in Maschinencode übersetzt wird.
+
+### NuGet
+
+Paketmanager für .NET, vergleichbar mit npm (Node.js) oder pip (Python).
+
+```bash
+# Beispiel: Newtonsoft.Json installieren
+$ dotnet add package Newtonsoft.Json
+```
+
+### Garbage Collector (GC)
+
+Automatischer Speicherbereiniger. Entfernt nicht mehr referenzierte Objekte, um Speicher freizugeben.
+
+### Just-in-Time Compilation (JIT)
+
+Kompiliert IL-Code zur Laufzeit in nativen Maschinencode, wenn dieser benötigt wird.
 
 ---
 
