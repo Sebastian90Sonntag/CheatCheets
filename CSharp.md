@@ -108,11 +108,11 @@ dog.Speak(); // Ausgabe: Wuff!
 
 ### Erklärungen:
 
-* `class` definiert eine Klasse.
-* `public` macht Member von außen zugänglich.
-* `virtual` erlaubt das Überschreiben der Methode.
-* `override` überschreibt die geerbte Methode.
-* Mit `new Dog { ... }` wird ein Objekt mit Initialisierer erzeugt.
+- `class` definiert eine Klasse.
+- `public` macht Member von außen zugänglich.
+- `virtual` erlaubt das Überschreiben der Methode.
+- `override` überschreibt die geerbte Methode.
+- Mit `new Dog { ... }` wird ein Objekt mit Initialisierer erzeugt.
 
 **Hinweis:** Klassen können Konstruktoren, Properties, Felder, Methoden, Ereignisse und Indexer enthalten. Standardmäßig sind Klassen referenzbasiert.
 
@@ -124,9 +124,9 @@ Interfaces in C# definieren einen **Vertrag**, den implementierende Klassen erf�
 
 ### Vorteile:
 
-* Ermöglichen polymorphe Programmierung
-* Entkoppeln Implementierung von der Schnittstelle
-* Unterstützen Dependency Injection und Testbarkeit
+- Ermöglichen polymorphe Programmierung
+- Entkoppeln Implementierung von der Schnittstelle
+- Unterstützen Dependency Injection und Testbarkeit
 
 ### Beispiel: Interface und Implementierung
 
@@ -151,10 +151,10 @@ Test(logger); // Ausgabe: [LOG] Dies ist eine Meldung
 
 ### Erklärungen:
 
-* `interface` deklariert eine Schnittstelle.
-* Eine Klasse implementiert ein Interface mit `: InterfaceName`.
-* Die Methode muss exakt zur Signatur passen.
-* Du kannst mehrere Interfaces implementieren (Komma getrennt).
+- `interface` deklariert eine Schnittstelle.
+- Eine Klasse implementiert ein Interface mit `: InterfaceName`.
+- Die Methode muss exakt zur Signatur passen.
+- Du kannst mehrere Interfaces implementieren (Komma getrennt).
 
 **Hinweis:** Interfaces fördern saubere Architekturprinzipien wie SOLID – speziell das Interface Segregation Principle und das Dependency Inversion Principle.
 
@@ -178,9 +178,9 @@ try {
 
 ### Erklärungen:
 
-* `try`-Block enthält riskanten Code.
-* `catch` fängt spezifische oder allgemeine Exceptions.
-* `finally` wird **immer** ausgeführt (auch bei Fehlern oder `return`).
+- `try`-Block enthält riskanten Code.
+- `catch` fängt spezifische oder allgemeine Exceptions.
+- `finally` wird **immer** ausgeführt (auch bei Fehlern oder `return`).
 
 ### Eigene Exception-Klasse
 
@@ -192,10 +192,10 @@ class MyCustomException : Exception {
 
 ### Tipps:
 
-* Fange **nie** pauschal `Exception` ohne sinnvolle Behandlung.
-* Nutze gezielte `catch`-Blöcke für erwartete Fehler.
-* Logge Ausnahmen zentral (z. B. mit Serilog oder ILogger).
-* Werfe eigene Exceptions nur bei **wirklich außergewöhnlichen** Zuständen.
+- Fange **nie** pauschal `Exception` ohne sinnvolle Behandlung.
+- Nutze gezielte `catch`-Blöcke für erwartete Fehler.
+- Logge Ausnahmen zentral (z. B. mit Serilog oder ILogger).
+- Werfe eigene Exceptions nur bei **wirklich außergewöhnlichen** Zuständen.
 
 ---
 
@@ -223,15 +223,15 @@ async Task<string> FetchAsync() {
 
 ### Erklärungen:
 
-* `async` markiert eine Methode als asynchron.
-* `await` wartet auf das Ergebnis eines Tasks.
-* Rückgabetyp ist i. d. R. `Task` oder `Task<T>`.
+- `async` markiert eine Methode als asynchron.
+- `await` wartet auf das Ergebnis eines Tasks.
+- Rückgabetyp ist i. d. R. `Task` oder `Task<T>`.
 
 ### Wichtige Hinweise:
 
-* Verwende `ConfigureAwait(false)` in Bibliotheken.
-* Async-Methoden sollen *nicht* `void` zurückgeben (außer Eventhandler).
-* Fehler in async-Methoden lösen Exceptions aus, die im `Task` verpackt sind.
+- Verwende `ConfigureAwait(false)` in Bibliotheken.
+- Async-Methoden sollen _nicht_ `void` zurückgeben (außer Eventhandler).
+- Fehler in async-Methoden lösen Exceptions aus, die im `Task` verpackt sind.
 
 ### Beispiel: mehrere Tasks parallel
 
@@ -258,8 +258,8 @@ var even = list.Where(x => x % 2 == 0).ToList();
 
 ### Erklärungen:
 
-* `Where` ist ein **Extension-Method**, die einen Predicate-Filter anwendet.
-* LINQ verwendet Lambda-Ausdrücke (`x => ...`).
+- `Where` ist ein **Extension-Method**, die einen Predicate-Filter anwendet.
+- LINQ verwendet Lambda-Ausdrücke (`x => ...`).
 
 ### Weitere Operatoren:
 
@@ -294,34 +294,33 @@ app.Run();
 
 ---
 
-*Stand: .NET 8 – für produktionsreife Anwendungen empfohlene Praxis.*
+_Stand: .NET 8 – für produktionsreife Anwendungen empfohlene Praxis._
 C# cheatsheet
 =============
 
 C# quick reference cheat sheet that provides basic syntax and methods.
 
-[#](#getting-started)Getting Started
-------------------------------------
+## [#](#getting-started)Getting Started
 
 ### [#](#hello-cs)Hello.cs
 
- `class Hello {   // main method   static void Main(string[] args)   {     // Output: Hello, world!     Console.WriteLine("Hello, world!");   } }`
+`class Hello {   // main method   static void Main(string[] args)   {     // Output: Hello, world!     Console.WriteLine("Hello, world!");   } }`
 
 Creates a project directory for new console application
 
- `$ dotnet new console`
+`$ dotnet new console`
 
 Lists all the applications templates
 
- `$ dotnet new list`
+`$ dotnet new list`
 
 Compiling and running (make sure you are in the project directory)
 
- `$ dotnet run Hello, world!`
+`$ dotnet run Hello, world!`
 
 ### [#](#variables)Variables
 
- `int intNum = 9; long longNum = 9999999; float floatNum = 9.99F; double doubleNum = 99.999; decimal decimalNum = 99.9999M; char letter = 'D'; bool @bool = true; string site = "cheatsheets.zip";  var num = 999; var str = "999"; var bo = false;`
+`int intNum = 9; long longNum = 9999999; float floatNum = 9.99F; double doubleNum = 99.999; decimal decimalNum = 99.9999M; char letter = 'D'; bool @bool = true; string site = "cheatsheets.zip";  var num = 999; var str = "999"; var bo = false;`
 
 ### [#](#primitive-data-types)Primitive Data Types
 
@@ -381,44 +380,43 @@ _N/A_
 
 ### [#](#comments)Comments
 
- `// Single-line comment  /* Multi-line    comment */  // TODO: Adds comment to a task list in Visual Studio  /// Single-line comment used for documentation  /** Multi-line comment     used for documentation **/`
+`// Single-line comment  /* Multi-line    comment */  // TODO: Adds comment to a task list in Visual Studio  /// Single-line comment used for documentation  /** Multi-line comment     used for documentation **/`
 
 ### [#](#strings)Strings
 
- `string first = "John"; string last = "Doe";  // string concatenation string name = first + " " + last; Console.WriteLine(name); // => John Doe`
+`string first = "John"; string last = "Doe";  // string concatenation string name = first + " " + last; Console.WriteLine(name); // => John Doe`
 
 See: [Strings](#c-strings)
 
 ### [#](#user-input)User Input
 
- `Console.WriteLine("Enter number:"); if(int.TryParse(Console.ReadLine(),out int input)) {   // Input validated   Console.WriteLine($"You entered {input}"); }`
+`Console.WriteLine("Enter number:"); if(int.TryParse(Console.ReadLine(),out int input)) {   // Input validated   Console.WriteLine($"You entered {input}"); }`
 
 ### [#](#conditionals)Conditionals
 
- `int j = 10;  if (j == 10) {   Console.WriteLine("I get printed"); } else if (j > 10) {   Console.WriteLine("I don't"); } else {   Console.WriteLine("I also don't"); }`
+`int j = 10;  if (j == 10) {   Console.WriteLine("I get printed"); } else if (j > 10) {   Console.WriteLine("I don't"); } else {   Console.WriteLine("I also don't"); }`
 
 ### [#](#arrays)Arrays
 
- `char[] chars = new char[10]; chars[0] = 'a'; chars[1] = 'b';  string[] letters = {"A", "B", "C"}; int[] mylist = {100, 200}; bool[] answers = {true, false};`
+`char[] chars = new char[10]; chars[0] = 'a'; chars[1] = 'b';  string[] letters = {"A", "B", "C"}; int[] mylist = {100, 200}; bool[] answers = {true, false};`
 
 ### [#](#loops)Loops
 
- `int[] numbers = {1, 2, 3, 4, 5};  for(int i = 0; i < numbers.Length; i++) {   Console.WriteLine(numbers[i]); }`
+`int[] numbers = {1, 2, 3, 4, 5};  for(int i = 0; i < numbers.Length; i++) {   Console.WriteLine(numbers[i]); }`
 
-* * *
+---
 
- `foreach(int num in numbers) {   Console.WriteLine(num); }`
+`foreach(int num in numbers) {   Console.WriteLine(num); }`
 
-[#](#c-strings)C# Strings
--------------------------
+## [#](#c-strings)C# Strings
 
 ### [#](#string-concatenation)String concatenation
 
- `string first = "John"; string last = "Doe";  string name = first + " " + last; Console.WriteLine(name); // => John Doe`
+`string first = "John"; string last = "Doe";  string name = first + " " + last; Console.WriteLine(name); // => John Doe`
 
 ### [#](#string-interpolation)String interpolation
 
- `string first = "John"; string last = "Doe";  string name = $"{first} {last}"; Console.WriteLine(name); // => John Doe`
+`string first = "John"; string last = "Doe";  string name = $"{first} {last}"; Console.WriteLine(name); // => John Doe`
 
 ### [#](#string-members)String Members
 
@@ -456,14 +454,13 @@ Removes the provided character and creates an array out of the remaining charact
 
 ### [#](#verbatim-strings)Verbatim strings
 
- `string longString = @"I can type any characters in here !#@$%^&*()__+ '' \n \t except double quotes and I will be taken literally. I even work with multiple lines.";`
+`string longString = @"I can type any characters in here !#@$%^&*()__+ '' \n \t except double quotes and I will be taken literally. I even work with multiple lines.";`
 
 ### [#](#member-example)Member Example
 
- `// Using property of System.String string lengthOfString = "How long?"; lengthOfString.Length           // => 9  // Using methods of System.String lengthOfString.Contains("How"); // => true`
+`// Using property of System.String string lengthOfString = "How long?"; lengthOfString.Length           // => 9  // Using methods of System.String lengthOfString.Contains("How"); // => true`
 
-[#](#misc)Misc
---------------
+## [#](#misc)Misc
 
 ### [#](#general-net-terms)General .NET Terms
 
