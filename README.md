@@ -7,7 +7,7 @@
 3. [Flutter](https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/Flutter.md)
 4. [TypeScript](https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/TypeScript.md)
 5. [JavaScript](https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/JavaScript.md)
-6. []()
+6. [SQL-Syntax-QRMs-DesignPatterns](https://github.com/Sebastian90Sonntag/CheatCheets/blob/main/SQL-Syntax-QRMs-DesignPatterns.md)
 7. []()
 8. []()
 9. []()
